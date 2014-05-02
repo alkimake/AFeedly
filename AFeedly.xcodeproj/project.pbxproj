@@ -19,6 +19,10 @@
 		2F56010919142905004EED5F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F5600F119142904004EED5F /* UIKit.framework */; };
 		2F56011119142905004EED5F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2F56010F19142905004EED5F /* InfoPlist.strings */; };
 		2F56011319142905004EED5F /* AFeedlyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F56011219142905004EED5F /* AFeedlyTests.m */; };
+		2F560122191438A3004EED5F /* AFeedly.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 2F560121191438A3004EED5F /* AFeedly.podspec */; };
+		2F56016C191450EF004EED5F /* AFLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F56016B191450EF004EED5F /* AFLViewController.m */; };
+		2F560171191450FA004EED5F /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F56016D191450FA004EED5F /* Main_iPad.storyboard */; };
+		2F560172191450FA004EED5F /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F56016F191450FA004EED5F /* Main_iPhone.storyboard */; };
 		8BBE22C4C32D4D0A8E54DB83 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D5EB4EAFE24907A59D8566 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +53,11 @@
 		2F56010E19142905004EED5F /* AFeedlyTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AFeedlyTests-Info.plist"; sourceTree = "<group>"; };
 		2F56011019142905004EED5F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2F56011219142905004EED5F /* AFeedlyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AFeedlyTests.m; sourceTree = "<group>"; };
+		2F560121191438A3004EED5F /* AFeedly.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AFeedly.podspec; sourceTree = "<group>"; };
+		2F56016A191450EF004EED5F /* AFLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFLViewController.h; sourceTree = "<group>"; };
+		2F56016B191450EF004EED5F /* AFLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFLViewController.m; sourceTree = "<group>"; };
+		2F56016E191450FA004EED5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
+		2F560170191450FA004EED5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		C9D5EB4EAFE24907A59D8566 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB93450CB0E9468091A423DB /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -81,7 +90,7 @@
 		2F5600E119142904004EED5F = {
 			isa = PBXGroup;
 			children = (
-				2F56011C19142D7D004EED5F /* Source */,
+				2F560121191438A3004EED5F /* AFeedly.podspec */,
 				2F5600F319142904004EED5F /* AFeedly */,
 				2F56010C19142905004EED5F /* AFeedlyTests */,
 				2F5600EC19142904004EED5F /* Frameworks */,
@@ -114,6 +123,10 @@
 		2F5600F319142904004EED5F /* AFeedly */ = {
 			isa = PBXGroup;
 			children = (
+				2F56016D191450FA004EED5F /* Main_iPad.storyboard */,
+				2F56016F191450FA004EED5F /* Main_iPhone.storyboard */,
+				2F56016A191450EF004EED5F /* AFLViewController.h */,
+				2F56016B191450EF004EED5F /* AFLViewController.m */,
 				2F5600FC19142904004EED5F /* AFLAppDelegate.h */,
 				2F5600FD19142904004EED5F /* AFLAppDelegate.m */,
 				2F5600FF19142904004EED5F /* Images.xcassets */,
@@ -149,13 +162,6 @@
 				2F56010F19142905004EED5F /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		2F56011C19142D7D004EED5F /* Source */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,6 +225,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 2F5600E119142904004EED5F;
 			productRefGroup = 2F5600EB19142904004EED5F /* Products */;
@@ -237,6 +244,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F5600F819142904004EED5F /* InfoPlist.strings in Resources */,
+				2F560171191450FA004EED5F /* Main_iPad.storyboard in Resources */,
+				2F560172191450FA004EED5F /* Main_iPhone.storyboard in Resources */,
+				2F560122191438A3004EED5F /* AFeedly.podspec in Resources */,
 				2F56010019142904004EED5F /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,6 +301,7 @@
 			files = (
 				2F5600FE19142904004EED5F /* AFLAppDelegate.m in Sources */,
 				2F5600FA19142904004EED5F /* main.m in Sources */,
+				2F56016C191450EF004EED5F /* AFLViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,6 +338,22 @@
 				2F56011019142905004EED5F /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		2F56016D191450FA004EED5F /* Main_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2F56016E191450FA004EED5F /* Base */,
+			);
+			name = Main_iPad.storyboard;
+			sourceTree = "<group>";
+		};
+		2F56016F191450FA004EED5F /* Main_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2F560170191450FA004EED5F /* Base */,
+			);
+			name = Main_iPhone.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

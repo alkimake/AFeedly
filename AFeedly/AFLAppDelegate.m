@@ -7,15 +7,13 @@
 //
 
 #import "AFLAppDelegate.h"
+#import <AFeedly/AFeedly.h>
 
 @implementation AFLAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
+    [[AFLClient sharedClient] initWithApplicationId:@"sandbox" andSecret:@"0AUDIAHZEB0ISJ1JLFWZ"];
     return YES;
 }
 

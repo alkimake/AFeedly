@@ -13,4 +13,8 @@ Pod::Spec.new do |s|
   s.source_files  = 'Source/*.{h,m}'
   s.exclude_files = 'Classes/Exclude'
   s.requires_arc = true
+  
+  s.dependency 'AFNetworking', '~> 1.0'
+  s.dependency 'LROAuth2Client', '~> 0.0'
+
 end
