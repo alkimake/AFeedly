@@ -1,4 +1,4 @@
-![AFeedly](http://i.imgur.com/rtTBue3.png)
+![AFeedly](http://i.imgur.com/HUyU7Bo.png)
 
 Objective-C Feedly API Client
 
