@@ -38,6 +38,13 @@
             
             NSLog(@"Authentication Success");
             
+            [[AFLClient sharedClient] subscriptions:^(AFLClient *client, NSArray *subscriptions) {
+                
+            } failure:^(AFLClient *client, NSError *error) {
+                
+            }];
+            
+            
         } else {
             
             NSLog(@"%@",error);

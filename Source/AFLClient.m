@@ -11,7 +11,7 @@
 #import "AFLAuthViewController.h"
 #import <LROAuth2Client/LROAuth2AccessToken.h>
 
-static NSString * const kFeedlyAPIBaseURLString = @"http://sandbox.feedly.com/v3/";
+static NSString * const kFeedlyAPIBaseURLString = @"http://sandbox.feedly.com/v3";
 static NSString * const kFeedlyUserURLString = @"http://sandbox.feedly.com/v3/auth/auth";
 static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/auth/token";
 
@@ -22,6 +22,8 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
 @end
 
 @implementation AFLClient
+
+#pragma mark - Initialization
 
 + (instancetype) sharedClient {
     static id _sharedInstance = nil;
@@ -45,9 +47,22 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
         [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
         [self setParameterEncoding:AFJSONParameterEncoding];
         [self setDefaultHeader:@"Accept" value:@"application/json; charset=utf-8"];
+        if (self.token!=nil) {
+            [self setDefaultHeader:@"Authorization" value:[NSString stringWithFormat:@"OAuth %@",self.token.accessToken]];
+        }
+        
+        //JSONModel Key mapping
+        [JSONModel setGlobalKeyMapper:[
+                                       [JSONKeyMapper alloc] initWithDictionary:@{
+                                                                                  @"id":@"_id"
+                                                                                  }]
+         ];
+
     }
     return self;
 }
+
+#pragma mark - Token & Authentication
 
 - (LROAuth2AccessToken*)loadToken
 {
@@ -56,12 +71,14 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
 }
 
 - (void)saveToken:(LROAuth2AccessToken*)token{
+    [self setDefaultHeader:@"Authorization" value:[NSString stringWithFormat:@"OAuth %@",self.token.accessToken]];
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:token];
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"feedly/token"];
 }
 
 - (BOOL)isAuthenticated
 {
+    NSLog(@"token : %@",self.token.accessToken);
     return self.token!=nil && ![self.token hasExpired];
 }
 
@@ -99,7 +116,8 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
 - (void)authenticatePresentingViewControllerFrom:(UIViewController*)presentingViewController
                                  withResultBlock:(AFeedlyAuthenticationBlock)resultBlock
 {
-    if ([self isAuthenticated]) {
+    _authenticationResultBlock = resultBlock;
+   if ([self isAuthenticated]) {
         _authenticationResultBlock(YES, nil);
         return;
     }
@@ -114,9 +132,9 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
 
 - (void)receivedToken:(LROAuth2AccessToken*)token
 {
+    self.token = token;
     NSLog(@"token : %@",token);
     [self saveToken:token];
-    self.token = token;
     _authenticationResultBlock(YES,nil);
     if (self.authenticationNavigationViewController) {
         [self.authenticationNavigationViewController dismissViewControllerAnimated:YES completion:^{
@@ -137,6 +155,18 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
 {
     NSError *error = [[NSError alloc] initWithDomain:@"feedly" code:500 userInfo:nil];
     _authenticationResultBlock(NO,error);
+}
+
+#pragma mark - Connections
+
+-(void)subscriptions:(void (^)(AFLClient *client, NSArray*subscriptions ))resultBlock failure:(void (^)(AFLClient *client, NSError*error ))failBlock
+{
+    [self getPath:@"subscriptions" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSArray *result = [AFSubscription arrayOfModelsFromDictionaries:responseObject];
+        resultBlock(self,result);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failBlock(self,error);
+    }];
 }
 
 

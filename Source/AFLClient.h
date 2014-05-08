@@ -8,6 +8,13 @@
 
 #import "AFHTTPClient.h"
 #import <LROAuth2Client/LROAuth2Client.h>
+#import <JSONModel/JSONModel.h>
+
+#pragma mark - Models
+
+#import "AFSubscription.h"
+
+#pragma mark - Type
 
 typedef void(^AFeedlyAuthenticationBlock)(BOOL success, NSError *error);
 
@@ -26,6 +33,11 @@ typedef void(^AFeedlyAuthenticationBlock)(BOOL success, NSError *error);
                                  withResultBlock:(AFeedlyAuthenticationBlock)resultBlock;
 - (void)authenticateUsingWebview:(UIWebView*)webView
                  withResultBlock:(AFeedlyAuthenticationBlock)resultBlock;
+
+#pragma mark - 
+
+-(void)subscriptions:(void (^)(AFLClient *client, NSArray*subscriptions ))resultBlock failure:(void (^)(AFLClient *client, NSError*error ))failBlock;
+
 
 
 @end
