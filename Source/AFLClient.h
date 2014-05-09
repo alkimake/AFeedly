@@ -9,10 +9,12 @@
 #import "AFHTTPClient.h"
 #import <LROAuth2Client/LROAuth2Client.h>
 #import <JSONModel/JSONModel.h>
-
+#import "NSString+QueryString.h"
+#import "NSArray+JSONModelExtensions.h"
 #pragma mark - Models
 
 #import "AFSubscription.h"
+#import "AFFeed.h"
 
 #pragma mark - Type
 
@@ -36,8 +38,13 @@ typedef void(^AFeedlyAuthenticationBlock)(BOOL success, NSError *error);
 
 #pragma mark - 
 
--(void)subscriptions:(void (^)(AFLClient *client, NSArray*subscriptions ))resultBlock failure:(void (^)(AFLClient *client, NSError*error ))failBlock;
+-(void)subscriptions:(void (^)(NSArray*subscriptions))resultBlock
+             failure:(void (^)(NSError*error ))failBlock;
 
-
-
+-(void)feed:(NSString*)feedId
+    success:(void (^)(AFFeed*feed ))resultBlock
+    failure:(void (^)(NSError*error ))failBlock;
+-(void)feedsMeta:(NSArray*)feedIds
+         success:(void (^)(NSArray*feeds ))resultBlock
+         failure:(void (^)(NSError*error ))failBlock;
 @end

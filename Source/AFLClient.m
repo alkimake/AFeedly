@@ -46,7 +46,8 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
         self.token = [self loadToken];
         [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
         [self setParameterEncoding:AFJSONParameterEncoding];
-        [self setDefaultHeader:@"Accept" value:@"application/json; charset=utf-8"];
+        [self setDefaultHeader:@"Accept" value:@"application/json"];
+        [self setDefaultHeader:@"Accept-Charset" value:@"UTF-8"];
         if (self.token!=nil) {
             [self setDefaultHeader:@"Authorization" value:[NSString stringWithFormat:@"OAuth %@",self.token.accessToken]];
         }
@@ -57,7 +58,6 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
                                                                                   @"id":@"_id"
                                                                                   }]
          ];
-
     }
     return self;
 }
@@ -159,15 +159,49 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
 
 #pragma mark - Connections
 
--(void)subscriptions:(void (^)(AFLClient *client, NSArray*subscriptions ))resultBlock failure:(void (^)(AFLClient *client, NSError*error ))failBlock
+-(void)subscriptions:(void (^)(NSArray*subscriptions ))resultBlock
+             failure:(void (^)(NSError*error ))failBlock
 {
     [self getPath:@"subscriptions" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSArray *result = [AFSubscription arrayOfModelsFromDictionaries:responseObject];
-        resultBlock(self,result);
+        resultBlock(result);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        failBlock(self,error);
+        failBlock(error);
     }];
 }
 
+-(void)feedsMeta:(NSArray*)feedIds
+         success:(void (^)(NSArray*feeds ))resultBlock
+         failure:(void (^)(NSError*error ))failBlock
+{
+    NSMutableURLRequest *req = [self requestWithMethod:@"POST" path:@"feeds/.mget" parameters:nil];
+    [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    req.HTTPBody = [[feedIds toJSONString] dataUsingEncoding:NSUTF8StringEncoding];
+    AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:req success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSArray *result = [AFFeed arrayOfModelsFromDictionaries:responseObject];
+        resultBlock(result);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failBlock(error);
+    }];
+    [operation start];
+}
+
+
+-(void)feed:(NSString*)feedId
+        success:(void (^)(AFFeed*feed ))resultBlock
+        failure:(void (^)(NSError*error ))failBlock
+{
+    [self getPath:[NSString stringWithFormat:@"feeds/%@",[feedId stringByEscapingForURLQuery]] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSError *error;
+        NSDictionary *responseDictionary = (NSDictionary*)responseObject;
+        AFFeed *feed = [[AFFeed alloc] initWithDictionary:responseDictionary error:&error];
+        if (error) {
+            failBlock(error);
+        } else
+            resultBlock(feed);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failBlock(error);
+    }];
+}
 
 @end
