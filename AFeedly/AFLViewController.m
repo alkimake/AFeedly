@@ -67,16 +67,20 @@
 
 }
 
+-(void)getSaved{
+    [[AFLClient sharedClient] saved:^(AFStream *stream) {
+        
+    } failure:^(NSError *error) {
+        
+    }];
+
+}
+
 - (void)getProfile{
     [[AFLClient sharedClient] profile:^(AFProfile *profile) {
         NSLog(@"%@",profile);
         [_profileImage setImageWithURL:[NSURL URLWithString:profile.picture]];
         
-        [[AFLClient sharedClient] saved:^(AFProfile *profile) {
-            
-        } failure:^(NSError *error) {
-            
-        }];
         
     } failure:^(NSError *error) {
         

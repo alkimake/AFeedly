@@ -61,6 +61,7 @@ typedef void(^AFeedlyAuthenticationBlock)(BOOL success, NSError *error);
 -(void)profile:(void (^)(AFProfile*profile ))resultBlock
        failure:(void (^)(NSError*error ))failBlock;
 -(void)getStreamContentForId:(NSString*)contentId
+                  unreadOnly:(BOOL)unread
                      success:(void (^)(AFStream*stream ))resultBlock
                      failure:(void (^)(NSError*error ))failBlock;
 -(void)saved:(void (^)(AFStream*stream ))resultBlock

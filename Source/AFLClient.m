@@ -261,10 +261,15 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
 }
 
 -(void)getStreamContentForId:(NSString*)contentId
+                  unreadOnly:(BOOL)unread
                      success:(void (^)(AFStream*stream ))resultBlock
                      failure:(void (^)(NSError*error ))failBlock
 {
-    [self getPath:[NSString stringWithFormat:@"streams/%@/contents",[contentId stringByEscapingForURLQuery]] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    [parameters setObject:[contentId stringByEscapingForURLQuery] forKey:@"streamId"];
+    [parameters setObject:unread?@"true":@"false" forKey:@"unreadOnly"];
+    
+    [self getPath:@"streams/contents" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSError *error;
         NSDictionary *responseDictionary = (NSDictionary*)responseObject;
         AFStream *stream = [[AFStream alloc] initWithDictionary:responseDictionary error:&error];
@@ -286,7 +291,7 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
         return;
     }
     NSString *tag = [NSString stringWithFormat:@"user/%@/tag/global.saved",self.profile._id];
-    [self getStreamContentForId:tag success:resultBlock failure:failBlock];
+    [self getStreamContentForId:tag unreadOnly:NO success:resultBlock failure:failBlock];
 }
 
 @end
