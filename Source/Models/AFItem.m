@@ -27,6 +27,13 @@
     } else {
         
         TFHpple * doc= [[TFHpple alloc] initWithHTMLData:[self.content.content dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        
+        if (doc==nil) {
+            //TODO: add new error here
+            failBlock(nil);
+            return;
+        }
         NSArray * elements  = [doc searchWithXPathQuery:@"//img"];
         NSMutableArray *visuals = [[NSMutableArray alloc] initWithCapacity:0];
         for (TFHppleElement *element in elements) {
