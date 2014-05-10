@@ -17,6 +17,8 @@
 #import "AFFeed.h"
 #import "AFMarkers.h"
 #import "AFProfile.h"
+#import "AFItem.h"
+#import "AFStream.h"
 
 #pragma mark - Type
 
@@ -58,4 +60,10 @@ typedef void(^AFeedlyAuthenticationBlock)(BOOL success, NSError *error);
          failure:(void (^)(NSError*error ))failBlock;
 -(void)profile:(void (^)(AFProfile*profile ))resultBlock
        failure:(void (^)(NSError*error ))failBlock;
+-(void)getStreamContentForId:(NSString*)contentId
+                     success:(void (^)(AFStream*stream ))resultBlock
+                     failure:(void (^)(NSError*error ))failBlock;
+-(void)saved:(void (^)(AFStream*stream ))resultBlock
+     failure:(void (^)(NSError*error ))failBlock;
+
 @end

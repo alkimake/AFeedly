@@ -92,9 +92,9 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
     }
     
     _oauthClient = [[LROAuth2Client alloc]
-                   initWithClientID:_applicationId
-                   secret:_secretKey
-                   redirectURL:[NSURL URLWithString:@"http://localhost"]];
+                    initWithClientID:_applicationId
+                    secret:_secretKey
+                    redirectURL:[NSURL URLWithString:@"http://localhost"]];
     _oauthClient.delegate = self;
     _oauthClient.debug = NO;
     
@@ -117,7 +117,7 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
                                  withResultBlock:(AFeedlyAuthenticationBlock)resultBlock
 {
     _authenticationResultBlock = resultBlock;
-   if ([self isAuthenticated]) {
+    if ([self isAuthenticated]) {
         _authenticationResultBlock(YES, nil);
         return;
     }
@@ -157,10 +157,21 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
     _authenticationResultBlock(NO,error);
 }
 
+- (BOOL)validateProfile:(void (^)(NSError*error ))failBlock
+{
+    if (self.profile==nil) {
+        NSError *error = [[NSError alloc] initWithDomain:@"AFeedly" code:501 userInfo:@{@"ErrorMessage":@"Profile be fetched first"}];
+        failBlock(error);
+        return NO;
+    }
+    return YES;
+}
+
+
 #pragma mark - Connections
 
 -(void)markers:(void (^)(AFMarkers *markers))resultBlock
-          failure:(void (^)(NSError*error ))failBlock
+       failure:(void (^)(NSError*error ))failBlock
 {
     [self getPath:@"markers/counts" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSError *error;
@@ -215,8 +226,8 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
 
 
 -(void)feed:(NSString*)feedId
-        success:(void (^)(AFFeed*feed ))resultBlock
-        failure:(void (^)(NSError*error ))failBlock
+    success:(void (^)(AFFeed*feed ))resultBlock
+    failure:(void (^)(NSError*error ))failBlock
 {
     [self getPath:[NSString stringWithFormat:@"feeds/%@",[feedId stringByEscapingForURLQuery]] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSError *error;
@@ -249,5 +260,33 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
     }];
 }
 
+-(void)getStreamContentForId:(NSString*)contentId
+                     success:(void (^)(AFStream*stream ))resultBlock
+                     failure:(void (^)(NSError*error ))failBlock
+{
+    [self getPath:[NSString stringWithFormat:@"streams/%@/contents",[contentId stringByEscapingForURLQuery]] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSError *error;
+        NSDictionary *responseDictionary = (NSDictionary*)responseObject;
+        AFStream *stream = [[AFStream alloc] initWithDictionary:responseDictionary error:&error];
+        if (error) {
+            failBlock(error);
+        } else{
+            resultBlock(stream);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failBlock(error);
+    }];
+    
+}
+
+-(void)saved:(void (^)(AFStream*stream ))resultBlock
+     failure:(void (^)(NSError*error ))failBlock
+{
+    if (![self validateProfile:failBlock]) {
+        return;
+    }
+    NSString *tag = [NSString stringWithFormat:@"user/%@/tag/global.saved",self.profile._id];
+    [self getStreamContentForId:tag success:resultBlock failure:failBlock];
+}
 
 @end
