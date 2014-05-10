@@ -159,6 +159,17 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
 
 #pragma mark - Connections
 
+-(void)categories:(void (^)(NSArray*categories ))resultBlock
+          failure:(void (^)(NSError*error ))failBlock
+{
+    [self getPath:@"categories" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSArray *result = [AFCategory arrayOfModelsFromDictionaries:responseObject];
+        resultBlock(result);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failBlock(error);
+    }];
+}
+
 -(void)subscriptions:(void (^)(NSArray*subscriptions ))resultBlock
              failure:(void (^)(NSError*error ))failBlock
 {

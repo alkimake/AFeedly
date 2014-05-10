@@ -13,8 +13,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *authenticationButton;
 @property (weak, nonatomic) IBOutlet UIButton *subscriptionButton;
 @property (weak, nonatomic) IBOutlet UIButton *metadataButton;
+@property (weak, nonatomic) IBOutlet UIButton *categoryButton;
 
 @property (nonatomic,strong) AFSubscription *feedlySubscription;
+@property (nonatomic,strong) NSArray *subscriptions;
 
 @end
 
@@ -43,6 +45,7 @@
             
             _authenticationButton.enabled = NO;
             _subscriptionButton.enabled = YES;
+            _categoryButton.enabled = YES;
             
             NSLog(@"Authentication Success");
 
@@ -54,6 +57,31 @@
     }];
 
 }
+- (IBAction)categoryButtonPressed:(id)sender {
+    
+    [[AFLClient sharedClient] categories:^(NSArray *categories) {
+        
+        if ([categories count]>0) {
+            
+            [_categoryButton setTitle:((AFCategory*)categories[0]).label forState:UIControlStateNormal];
+            NSLog(@"%@",categories);
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+
+}
+
+- (void)getAllFeedsMetaData{
+    NSArray *feedIds = [_subscriptions valueForKeyPath:@"_id"];
+    
+    [[AFLClient sharedClient] feedsMeta:feedIds success:^(NSArray *feeds) {
+        NSLog(@"%@",feeds);
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
 
 - (IBAction)subscriptionButtonPressed:(id)sender {
     
@@ -62,21 +90,12 @@
         if ([subscriptions count]>0) {
             
             self.feedlySubscription = subscriptions[0];
+            self.subscriptions = subscriptions;
             
             [_subscriptionButton setTitle:_feedlySubscription.title forState:UIControlStateNormal];
             NSLog(@"%@",self.feedlySubscription.description);
             
             _metadataButton.enabled = YES;
-            
-            NSArray *feedIds = [subscriptions valueForKeyPath:@"_id"];
-            
-            [[AFLClient sharedClient] feedsMeta:feedIds success:^(NSArray *feeds) {
-                NSLog(@"%@",feeds);
-            } failure:^(NSError *error) {
-                NSLog(@"%@",error);
-            }];
-            
-            
         }
         
     } failure:^(NSError *error) {

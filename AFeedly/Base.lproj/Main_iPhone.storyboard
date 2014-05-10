@@ -27,7 +27,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OnQ-ZN-Ubc">
-                                <rect key="frame" x="0.0" y="78" width="320" height="50"/>
+                                <rect key="frame" x="0.0" y="133" width="320" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Get Subscriptions">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -36,8 +36,18 @@
                                     <action selector="subscriptionButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="g71-IP-0rP"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CEm-cl-mNU">
+                                <rect key="frame" x="0.0" y="78" width="320" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Get Categories">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="categoryButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="88Y-AU-Bgm"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nvh-cm-HDW">
-                                <rect key="frame" x="0.0" y="136" width="320" height="50"/>
+                                <rect key="frame" x="0.0" y="191" width="320" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Get Subscription(Feed) Meta">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -51,6 +61,7 @@
                     </view>
                     <connections>
                         <outlet property="authenticationButton" destination="jGu-h9-aGd" id="Ikt-M6-2rB"/>
+                        <outlet property="categoryButton" destination="CEm-cl-mNU" id="hpg-0G-cMY"/>
                         <outlet property="metadataButton" destination="nvh-cm-HDW" id="yyj-yk-8RR"/>
                         <outlet property="subscriptionButton" destination="OnQ-ZN-Ubc" id="e9Z-Ak-bP7"/>
                     </connections>

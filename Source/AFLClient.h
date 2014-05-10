@@ -38,6 +38,8 @@ typedef void(^AFeedlyAuthenticationBlock)(BOOL success, NSError *error);
 
 #pragma mark - 
 
+-(void)categories:(void (^)(NSArray*categories ))resultBlock
+          failure:(void (^)(NSError*error ))failBlock;
 -(void)subscriptions:(void (^)(NSArray*subscriptions))resultBlock
              failure:(void (^)(NSError*error ))failBlock;
 
