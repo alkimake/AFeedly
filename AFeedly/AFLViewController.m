@@ -8,8 +8,11 @@
 
 #import "AFLViewController.h"
 #import <AFeedly/AFeedly.h>
+#import <AFNetworking/UIImageView+AFNetworking.h>
+#import <QuartzCore/QuartzCore.h>
 
 @interface AFLViewController ()
+@property (weak, nonatomic) IBOutlet UIImageView *profileImage;
 @property (weak, nonatomic) IBOutlet UIButton *authenticationButton;
 @property (weak, nonatomic) IBOutlet UIButton *subscriptionButton;
 @property (weak, nonatomic) IBOutlet UIButton *metadataButton;
@@ -25,6 +28,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [[_profileImage layer] setMasksToBounds:YES];
+    [[_profileImage layer] setCornerRadius:25.0f];
+    
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -48,6 +55,8 @@
             _categoryButton.enabled = YES;
             
             NSLog(@"Authentication Success");
+            
+            [self getProfile];
 
         } else {
             
@@ -57,6 +66,16 @@
     }];
 
 }
+
+- (void)getProfile{
+    [[AFLClient sharedClient] profile:^(AFProfile *profile) {
+        NSLog(@"%@",profile);
+        [_profileImage setImageWithURL:[NSURL URLWithString:profile.picture]];
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
 - (IBAction)categoryButtonPressed:(id)sender {
     
     [[AFLClient sharedClient] categories:^(NSArray *categories) {
@@ -78,6 +97,15 @@
     
     [[AFLClient sharedClient] feedsMeta:feedIds success:^(NSArray *feeds) {
         NSLog(@"%@",feeds);
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+-(void)getMarkers
+{
+    [[AFLClient sharedClient] markers:^(AFMarkers *markers) {
+        NSLog(@"%@",markers);
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];

@@ -23,6 +23,7 @@
 		2F56016C191450EF004EED5F /* AFLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F56016B191450EF004EED5F /* AFLViewController.m */; };
 		2F560171191450FA004EED5F /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F56016D191450FA004EED5F /* Main_iPad.storyboard */; };
 		2F560172191450FA004EED5F /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F56016F191450FA004EED5F /* Main_iPhone.storyboard */; };
+		2F7D8F2B191E67F100D920CA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7D8F2A191E67F100D920CA /* QuartzCore.framework */; };
 		8BBE22C4C32D4D0A8E54DB83 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D5EB4EAFE24907A59D8566 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +59,7 @@
 		2F56016B191450EF004EED5F /* AFLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFLViewController.m; sourceTree = "<group>"; };
 		2F56016E191450FA004EED5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		2F560170191450FA004EED5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
+		2F7D8F2A191E67F100D920CA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		C9D5EB4EAFE24907A59D8566 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB93450CB0E9468091A423DB /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -67,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F7D8F2B191E67F100D920CA /* QuartzCore.framework in Frameworks */,
 				2F5600F019142904004EED5F /* CoreGraphics.framework in Frameworks */,
 				2F5600F219142904004EED5F /* UIKit.framework in Frameworks */,
 				2F5600EE19142904004EED5F /* Foundation.framework in Frameworks */,
@@ -111,6 +114,7 @@
 		2F5600EC19142904004EED5F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2F7D8F2A191E67F100D920CA /* QuartzCore.framework */,
 				2F5600ED19142904004EED5F /* Foundation.framework */,
 				2F5600EF19142904004EED5F /* CoreGraphics.framework */,
 				2F5600F119142904004EED5F /* UIKit.framework */,

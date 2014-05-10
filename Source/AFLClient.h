@@ -15,6 +15,8 @@
 
 #import "AFSubscription.h"
 #import "AFFeed.h"
+#import "AFMarkers.h"
+#import "AFProfile.h"
 
 #pragma mark - Type
 
@@ -27,6 +29,8 @@ typedef void(^AFeedlyAuthenticationBlock)(BOOL success, NSError *error);
 @property (nonatomic,strong) NSString *applicationId;
 @property (nonatomic,strong) NSString *secretKey;
 
+@property (nonatomic,strong) AFProfile *profile;
+
 + (instancetype) sharedClient;
 - (void)initWithApplicationId:(NSString*)appId andSecret:(NSString*)secret;
 - (BOOL)isAuthenticated;
@@ -37,9 +41,12 @@ typedef void(^AFeedlyAuthenticationBlock)(BOOL success, NSError *error);
                  withResultBlock:(AFeedlyAuthenticationBlock)resultBlock;
 
 #pragma mark - 
+-(void)markers:(void (^)(AFMarkers *markers))resultBlock
+       failure:(void (^)(NSError*error ))failBlock;
 
 -(void)categories:(void (^)(NSArray*categories ))resultBlock
           failure:(void (^)(NSError*error ))failBlock;
+
 -(void)subscriptions:(void (^)(NSArray*subscriptions))resultBlock
              failure:(void (^)(NSError*error ))failBlock;
 
@@ -49,4 +56,6 @@ typedef void(^AFeedlyAuthenticationBlock)(BOOL success, NSError *error);
 -(void)feedsMeta:(NSArray*)feedIds
          success:(void (^)(NSArray*feeds ))resultBlock
          failure:(void (^)(NSError*error ))failBlock;
+-(void)profile:(void (^)(AFProfile*profile ))resultBlock
+       failure:(void (^)(NSError*error ))failBlock;
 @end

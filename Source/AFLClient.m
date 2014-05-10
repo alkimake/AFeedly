@@ -159,6 +159,22 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
 
 #pragma mark - Connections
 
+-(void)markers:(void (^)(AFMarkers *markers))resultBlock
+          failure:(void (^)(NSError*error ))failBlock
+{
+    [self getPath:@"markers/counts" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSError *error;
+        AFMarkers *result = [[AFMarkers alloc] initWithDictionary:responseObject error:&error];
+        if(error)
+            failBlock(error);
+        else
+            resultBlock(result);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failBlock(error);
+    }];
+}
+
+
 -(void)categories:(void (^)(NSArray*categories ))resultBlock
           failure:(void (^)(NSError*error ))failBlock
 {
@@ -214,5 +230,24 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
         failBlock(error);
     }];
 }
+
+-(void)profile:(void (^)(AFProfile*profile ))resultBlock
+       failure:(void (^)(NSError*error ))failBlock
+{
+    [self getPath:@"profile" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSError *error;
+        NSDictionary *responseDictionary = (NSDictionary*)responseObject;
+        AFProfile *profile = [[AFProfile alloc] initWithDictionary:responseDictionary error:&error];
+        if (error) {
+            failBlock(error);
+        } else{
+            self.profile = profile;
+            resultBlock(profile);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failBlock(error);
+    }];
+}
+
 
 @end
