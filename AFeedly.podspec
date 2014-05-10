@@ -17,5 +17,6 @@ Pod::Spec.new do |s|
   s.dependency 'AFNetworking', '~> 1.0'
   s.dependency 'LROAuth2Client', '~> 0.0'
   s.dependency 'JSONModel', '~> 0.13'
+  s.dependency 'hpple', '~> 0.2'
 
 end

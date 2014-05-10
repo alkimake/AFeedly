@@ -70,6 +70,16 @@
 - (IBAction)allUnreadButtonPressed:(id)sender {
     [[AFLClient sharedClient] unreadStream:^(AFStream *stream) {
         NSLog(@"Unread Stream Returned");
+        
+        for (AFItem*item in stream.items)
+        {
+            [item visualsUrlArray:^(NSArray *urls) {
+                NSLog(@"%@",urls);
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error);
+            }];
+        }
+        
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
