@@ -19,6 +19,14 @@
     return [(AFCount*)[self.unreadcounts objectAtIndex:index] count];
 }
 
+- (NSInteger)countForFeed:(NSString*)feedId
+{
+    NSInteger index = [self.unreadcounts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        return [[(AFCount*)obj _id] isEqualToString:feedId];
+    }];
+    return [(AFCount*)[self.unreadcounts objectAtIndex:index] count];
+}
+
 - (NSArray*)userCategoryCounts
 {
     NSIndexSet *indexes = [self.unreadcounts indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {

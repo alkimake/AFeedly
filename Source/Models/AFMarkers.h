@@ -16,4 +16,6 @@
 - (NSInteger)totalUnreadCount;
 - (NSArray*)userCategoryCounts;
 - (NSArray*)feedCounts;
+- (NSInteger)countForFeed:(NSString*)feedId;
+
 @end
