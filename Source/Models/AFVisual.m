@@ -9,5 +9,8 @@
 #import "AFVisual.h"
 
 @implementation AFVisual
-
++(BOOL)propertyIsOptional:(NSString*)propertyName
+{
+    return YES;
+}
 @end
