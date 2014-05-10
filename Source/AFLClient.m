@@ -294,4 +294,14 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
     [self getStreamContentForId:tag unreadOnly:NO success:resultBlock failure:failBlock];
 }
 
+-(void)unreadStream:(void (^)(AFStream*stream ))resultBlock
+            failure:(void (^)(NSError*error ))failBlock
+{
+    if (![self validateProfile:failBlock]) {
+        return;
+    }
+    NSString *tag = [NSString stringWithFormat:@"user/%@/category/global.all",self.profile._id];
+    [self getStreamContentForId:tag unreadOnly:YES success:resultBlock failure:failBlock];
+}
+
 @end

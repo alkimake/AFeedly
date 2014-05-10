@@ -56,6 +56,16 @@
                                     <action selector="metadataButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="dEO-Bm-Fck"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fNf-Sk-lN4">
+                                <rect key="frame" x="0.0" y="249" width="320" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Get All Unread">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="allUnreadButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="TQg-jR-yer"/>
+                                </connections>
+                            </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ynV-uk-XhE">
                                 <rect key="frame" x="0.0" y="20" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -64,6 +74,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="allUnreadButton" destination="fNf-Sk-lN4" id="q0Y-hk-Fof"/>
                         <outlet property="authenticationButton" destination="jGu-h9-aGd" id="Ikt-M6-2rB"/>
                         <outlet property="categoryButton" destination="CEm-cl-mNU" id="hpg-0G-cMY"/>
                         <outlet property="metadataButton" destination="nvh-cm-HDW" id="yyj-yk-8RR"/>

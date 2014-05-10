@@ -66,5 +66,7 @@ typedef void(^AFeedlyAuthenticationBlock)(BOOL success, NSError *error);
                      failure:(void (^)(NSError*error ))failBlock;
 -(void)saved:(void (^)(AFStream*stream ))resultBlock
      failure:(void (^)(NSError*error ))failBlock;
+-(void)unreadStream:(void (^)(AFStream*stream ))resultBlock
+            failure:(void (^)(NSError*error ))failBlock;
 
 @end

@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *subscriptionButton;
 @property (weak, nonatomic) IBOutlet UIButton *metadataButton;
 @property (weak, nonatomic) IBOutlet UIButton *categoryButton;
+@property (weak, nonatomic) IBOutlet UIButton *allUnreadButton;
 
 @property (nonatomic,strong) AFSubscription *feedlySubscription;
 @property (nonatomic,strong) NSArray *subscriptions;
@@ -66,6 +67,13 @@
     }];
 
 }
+- (IBAction)allUnreadButtonPressed:(id)sender {
+    [[AFLClient sharedClient] unreadStream:^(AFStream *stream) {
+        NSLog(@"Unread Stream Returned");
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
 
 -(void)getSaved{
     [[AFLClient sharedClient] saved:^(AFStream *stream) {
@@ -81,7 +89,7 @@
         NSLog(@"%@",profile);
         [_profileImage setImageWithURL:[NSURL URLWithString:profile.picture]];
         
-        
+        [_allUnreadButton setEnabled:YES];
     } failure:^(NSError *error) {
         
     }];
