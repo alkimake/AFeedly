@@ -23,7 +23,9 @@
                failure:(void (^)(NSError*error ))failBlock{
     
     if (self.visual) {
-        resultBlock([NSArray arrayWithObject:self.visual.url]);
+        if (![self.visual.url isEqualToString:@"none"]) {
+            resultBlock([NSArray arrayWithObject:self.visual.url]);
+        }
     } else {
         
         TFHpple * doc= [[TFHpple alloc] initWithHTMLData:[self.content.content dataUsingEncoding:NSUTF8StringEncoding]];
