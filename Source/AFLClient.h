@@ -11,6 +11,7 @@
 #import <JSONModel/JSONModel.h>
 #import "NSString+QueryString.h"
 #import "NSArray+JSONModelExtensions.h"
+
 #pragma mark - Models
 
 #import "AFSubscription.h"
@@ -24,6 +25,12 @@
 
 typedef void(^AFeedlyAuthenticationBlock)(BOOL success, NSError *error);
 
+typedef enum {
+    AFContentTypeEntry,
+    AFContentTypeFeed,
+    AFContentTypeCategory
+} AFContentType;
+
 @interface AFLClient : AFHTTPClient <LROAuth2ClientDelegate>
 
 @property (nonatomic,strong) LROAuth2Client *oauthClient;
@@ -32,6 +39,8 @@ typedef void(^AFeedlyAuthenticationBlock)(BOOL success, NSError *error);
 @property (nonatomic,strong) NSString *secretKey;
 
 @property (nonatomic,strong) AFProfile *profile;
+
+@property (nonatomic,assign) BOOL isSyncWithServer;
 
 + (instancetype) sharedClient;
 - (void)initWithApplicationId:(NSString*)appId andSecret:(NSString*)secret;

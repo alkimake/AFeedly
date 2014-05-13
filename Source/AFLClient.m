@@ -62,6 +62,9 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
     return self;
 }
 
+
+
+
 #pragma mark - Token & Authentication
 
 - (LROAuth2AccessToken*)loadToken
@@ -170,6 +173,66 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
 
 #pragma mark - Connections
 
+
+-(void)markAs:(BOOL)unread
+       forIds:(NSArray*)feedIds
+     withType:(AFContentType)type
+  lastEntryId:(NSString*)lastReadEntryId
+         success:(void (^)(BOOL success))resultBlock
+         failure:(void (^)(NSError*error ))failBlock
+{
+
+    NSMutableDictionary *parameters = [NSMutableDictionary new];
+    
+    NSString *idArrayName = @"entryIds";
+    NSString *typeString = @"entries";
+    
+    switch (type) {
+        case AFContentTypeCategory:
+        {
+            idArrayName = @"categoryIds";
+            typeString = @"categories";
+        }
+            break;
+        case AFContentTypeFeed:
+        {
+            idArrayName = @"feedIds";
+            typeString = @"feeds";
+        }
+            break;
+            
+        case AFContentTypeEntry:
+        {
+            idArrayName = @"entryIds";
+            typeString = @"entries";
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    NSString *action = (!unread)?@"markAsRead":@"keepUnread";
+    
+    [parameters setObject:feedIds forKey:idArrayName];
+    [parameters setObject:typeString forKey:@"type"];
+    [parameters setObject:action forKey:@"action"];
+    if (type!=AFContentTypeEntry) {
+        [parameters setObject:lastReadEntryId forKey:@"lastReadEntryId"];
+    }
+    
+    NSMutableURLRequest *req = [self requestWithMethod:@"POST" path:@"markers" parameters:nil];
+    [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    
+    [self postPath:@"markers" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock(YES);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failBlock(error);
+    }];
+    
+}
+
 -(void)markers:(void (^)(AFMarkers *markers))resultBlock
        failure:(void (^)(NSError*error ))failBlock
 {
@@ -274,6 +337,15 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
         if (error) {
             failBlock(error);
         } else{
+            
+            if (_isSyncWithServer) {
+                
+                for (AFItem*item in stream.items) {
+                    [item addObserver:self forKeyPath:@"unread" options:NSKeyValueObservingOptionNew context:nil];
+                }
+                
+            }
+            
             resultBlock(stream);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -301,5 +373,32 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
     NSString *categoryId = [NSString stringWithFormat:@"user/%@/category/global.all",self.profile._id];
     [self getStreamContentForId:categoryId unreadOnly:YES success:resultBlock failure:failBlock];
 }
+
+
+#pragma mark - KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
+{
+
+    if ([object isKindOfClass:[AFItem class]]) {
+        
+        AFItem *item = (AFItem*)object;
+        
+        [self markAs:item.unread
+              forIds:@[item._id]
+            withType:AFContentTypeEntry
+         lastEntryId:nil
+             success:^(BOOL success) {
+                 NSLog(@"mark as %@",item.unread?@"unread":@"read");
+             } failure:^(NSError *error) {
+                 NSLog(@"%@",error.localizedDescription);
+             }];
+        
+    }
+}
+
 
 @end

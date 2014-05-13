@@ -12,7 +12,7 @@
 @implementation AFItem
 + (JSONKeyMapper *)keyMapper
 {
-    return [[JSONKeyMapper alloc] initWithDictionary:@{@"actionTimestamp" : @"actionTime"}];
+    return [[JSONKeyMapper alloc] initWithDictionary:@{@"id" : @"_id",@"actionTimestamp" : @"actionTime"}];
 }
 +(BOOL)propertyIsOptional:(NSString*)propertyName
 {
