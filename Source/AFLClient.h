@@ -10,6 +10,7 @@
 #import <LROAuth2Client/LROAuth2Client.h>
 #import <JSONModel/JSONModel.h>
 #import "NSString+QueryString.h"
+#import "NSArray+QueryString.h"
 #import "NSArray+JSONModelExtensions.h"
 
 #pragma mark - Models
@@ -37,9 +38,7 @@ typedef enum {
 
 @property (nonatomic,strong) NSString *applicationId;
 @property (nonatomic,strong) NSString *secretKey;
-
 @property (nonatomic,strong) AFProfile *profile;
-
 @property (nonatomic,assign) BOOL isSyncWithServer;
 
 + (instancetype) sharedClient;
@@ -50,6 +49,11 @@ typedef enum {
                                  withResultBlock:(AFeedlyAuthenticationBlock)resultBlock;
 - (void)authenticateUsingWebview:(UIWebView*)webView
                  withResultBlock:(AFeedlyAuthenticationBlock)resultBlock;
+
+#pragma mark - definitions
+
+- (NSString*)unreadsCategoryName;
+- (NSString*)savedTagName;
 
 #pragma mark - 
 -(void)markers:(void (^)(AFMarkers *markers))resultBlock
@@ -77,5 +81,22 @@ typedef enum {
      failure:(void (^)(NSError*error ))failBlock;
 -(void)unreadStream:(void (^)(AFStream*stream ))resultBlock
             failure:(void (^)(NSError*error ))failBlock;
-
+-(void)markAs:(BOOL)unread
+       forIds:(NSArray*)feedIds
+     withType:(AFContentType)type
+  lastEntryId:(NSString*)lastReadEntryId
+      success:(void (^)(BOOL success))resultBlock
+      failure:(void (^)(NSError*error ))failBlock;
+-(void)tagEntry:(NSString*)entryId
+           tags:(NSArray*)tags
+        success:(void (^)(BOOL success ))resultBlock
+        failure:(void (^)(NSError*error ))failBlock;
+-(void)tagEntries:(NSArray*)entryIds
+             tags:(NSArray*)tags
+          success:(void (^)(BOOL success ))resultBlock
+          failure:(void (^)(NSError*error ))failBlock;
+-(void)untagEntries:(NSArray*)entryIds
+               tags:(NSArray*)tags
+            success:(void (^)(BOOL success ))resultBlock
+            failure:(void (^)(NSError*error ))failBlock;
 @end

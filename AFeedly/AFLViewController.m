@@ -72,6 +72,7 @@
         NSLog(@"Unread Stream Returned");
         
         [[[stream items] lastObject] setUnread:NO];
+        [[[stream items] lastObject] setSaved:YES];
         
         
     } failure:^(NSError *error) {

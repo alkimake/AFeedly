@@ -7,6 +7,7 @@
 //
 
 #import "AFItem.h"
+#import "AFTag.h"
 #import <hpple/TFHpple.h>
 
 @implementation AFItem
@@ -17,6 +18,14 @@
 +(BOOL)propertyIsOptional:(NSString*)propertyName
 {
     return YES;
+}
+
+-(BOOL)isSaved
+{
+    NSIndexSet *indexes = [self.tags indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        return [[(AFTag*)obj label] hasSuffix:@"global.saved"];
+    }];
+    return indexes.count>0;
 }
 
 -(void)visualsUrlArray:(void (^)(NSArray*urls ))resultBlock

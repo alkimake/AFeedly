@@ -11,6 +11,7 @@
 #import "AFLAuthViewController.h"
 #import <LROAuth2Client/LROAuth2AccessToken.h>
 
+
 static NSString * const kFeedlyAPIBaseURLString = @"http://sandbox.feedly.com/v3";
 static NSString * const kFeedlyUserURLString = @"http://sandbox.feedly.com/v3/auth/auth";
 static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/auth/token";
@@ -168,6 +169,18 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
         return NO;
     }
     return YES;
+}
+
+#pragma mark - Definitions
+
+- (NSString*)unreadsCategoryName
+{
+    return [NSString stringWithFormat:@"user/%@/category/global.all",self.profile._id];
+}
+
+- (NSString*)savedTagName
+{
+    return [NSString stringWithFormat:@"user/%@/tag/global.saved",self.profile._id];
 }
 
 
@@ -342,6 +355,7 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
                 
                 for (AFItem*item in stream.items) {
                     [item addObserver:self forKeyPath:@"unread" options:NSKeyValueObservingOptionNew context:nil];
+                    [item addObserver:self forKeyPath:@"saved" options:NSKeyValueObservingOptionNew context:nil];
                 }
                 
             }
@@ -360,7 +374,7 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
     if (![self validateProfile:failBlock]) {
         return;
     }
-    NSString *tag = [NSString stringWithFormat:@"user/%@/tag/global.saved",self.profile._id];
+    NSString *tag = [self savedTagName];
     [self getStreamContentForId:tag unreadOnly:NO success:resultBlock failure:failBlock];
 }
 
@@ -370,9 +384,90 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
     if (![self validateProfile:failBlock]) {
         return;
     }
-    NSString *categoryId = [NSString stringWithFormat:@"user/%@/category/global.all",self.profile._id];
+    NSString *categoryId = [self unreadsCategoryName];
     [self getStreamContentForId:categoryId unreadOnly:YES success:resultBlock failure:failBlock];
 }
+
+-(void)tagEntry:(NSString*)entryId
+           tags:(NSArray*)tags
+        success:(void (^)(BOOL success ))resultBlock
+     failure:(void (^)(NSError*error ))failBlock
+{
+    if (![self validateProfile:failBlock]) {
+        return;
+    }
+    
+    
+    NSString *path = [NSString stringWithFormat:@"tags/%@",[[tags arrayByEscapingForURLQuery] componentsJoinedByString:@","]];
+    
+    NSLog(@"%@",path);
+    
+    NSDictionary *parameters = @{@"entryId":entryId};
+    
+    [self getPath:path
+       parameters:parameters
+          success:^(AFHTTPRequestOperation *operation, id responseObject) {
+              resultBlock(YES);
+          }
+          failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+              failBlock(error);
+          }];
+    
+}
+
+-(void)tagEntries:(NSArray*)entryIds
+           tags:(NSArray*)tags
+        success:(void (^)(BOOL success ))resultBlock
+        failure:(void (^)(NSError*error ))failBlock
+{
+    if (![self validateProfile:failBlock]) {
+        return;
+    }
+    
+    
+    NSString *path = [NSString stringWithFormat:@"tags/%@",[[tags arrayByEscapingForURLQuery] componentsJoinedByString:@","]];
+    
+    NSLog(@"%@",path);
+    
+    NSString *entries = [entryIds toJSONString];
+    NSDictionary *parameters = @{@"entryIds":entries};
+    
+    [self getPath:path
+       parameters:parameters
+          success:^(AFHTTPRequestOperation *operation, id responseObject) {
+              resultBlock(YES);
+          }
+          failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+              failBlock(error);
+          }];
+    
+}
+
+
+-(void)untagEntries:(NSArray*)entryIds
+             tags:(NSArray*)tags
+          success:(void (^)(BOOL success ))resultBlock
+          failure:(void (^)(NSError*error ))failBlock
+{
+    if (![self validateProfile:failBlock]) {
+        return;
+    }
+    
+    NSString *path = [NSString stringWithFormat:@"tags/%@/%@",[[tags arrayByEscapingForURLQuery] componentsJoinedByString:@","],[[entryIds arrayByEscapingForURLQuery] componentsJoinedByString:@","]];
+    
+    NSLog(@"%@",path);
+    
+    [self deletePath:path
+       parameters:nil
+          success:^(AFHTTPRequestOperation *operation, id responseObject) {
+              resultBlock(YES);
+          }
+          failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+              failBlock(error);
+          }];
+    
+}
+
 
 
 #pragma mark - KVO
@@ -387,16 +482,41 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
         
         AFItem *item = (AFItem*)object;
         
-        [self markAs:item.unread
-              forIds:@[item._id]
-            withType:AFContentTypeEntry
-         lastEntryId:nil
-             success:^(BOOL success) {
-                 NSLog(@"mark as %@",item.unread?@"unread":@"read");
-             } failure:^(NSError *error) {
-                 NSLog(@"%@",error.localizedDescription);
-             }];
+        if ([keyPath isEqualToString:@"unread"]) {
+            [self markAs:item.unread
+                  forIds:@[item._id]
+                withType:AFContentTypeEntry
+             lastEntryId:nil
+                 success:^(BOOL success) {
+                     NSLog(@"mark as %@",item.unread?@"unread":@"read");
+                 } failure:^(NSError *error) {
+                     NSLog(@"%@",error.localizedDescription);
+                 }];
+        }
         
+        if ([keyPath isEqualToString:@"saved"]) {
+            
+            if (item.saved) {
+                [self tagEntry:item._id
+                          tags:@[[self savedTagName]]
+                       success:^(BOOL success) {
+                           NSLog(@"saved");
+                       } failure:^(NSError *error) {
+                           NSLog(@"%@",error.localizedDescription);
+                       }];
+            } else {
+            
+                [self untagEntries:@[item._id]
+                              tags:@[[self savedTagName]]
+                           success:^(BOOL success) {
+                               NSLog(@"unsaved");
+                           } failure:^(NSError *error) {
+                               NSLog(@"%@",error.localizedDescription);
+                           }];
+            }
+            
+            
+        }
     }
 }
 

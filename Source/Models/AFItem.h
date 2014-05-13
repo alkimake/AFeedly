@@ -41,9 +41,12 @@
 @property (nonatomic, strong) NSDate* actionTime;
 @property (nonatomic, assign) BOOL unread;
 @property (nonatomic, strong) AFContent *content;
+@property (nonatomic, assign) BOOL saved;
 
 -(void)visualsUrlArray:(void (^)(NSArray*urls ))resultBlock
                failure:(void (^)(NSError*error ))failBlock;
+-(BOOL)isSaved;
+
 
 
 @end
