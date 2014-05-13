@@ -20,12 +20,31 @@
     return YES;
 }
 
+-(void)setSaved:(BOOL)saved
+{
+    _saved = saved;
+    
+    if (!saved) {
+        
+            NSMutableArray *tempArray = [NSMutableArray arrayWithArray:self.tags];
+            for (AFTag*tag in tempArray) {
+                if ([[tag label] hasSuffix:@"global.saved"]) {
+                    [tempArray removeObject:tag];
+                }
+            }
+        self.tags = (NSArray<AFTag>*)[NSArray arrayWithArray:tempArray];
+    }
+    
+}
+
 -(BOOL)isSaved
 {
-    NSIndexSet *indexes = [self.tags indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+    if (_saved == NO) {
+        NSIndexSet *indexes = [self.tags indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         return [[(AFTag*)obj label] hasSuffix:@"global.saved"];
-    }];
-    return indexes.count>0;
+        }];
+        return indexes.count>0;
+    } else return _saved;
 }
 
 -(void)visualsUrlArray:(void (^)(NSArray*urls ))resultBlock
