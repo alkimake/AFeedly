@@ -9,5 +9,8 @@
 #import "AFAlternate.h"
 
 @implementation AFAlternate
-
++(BOOL)propertyIsOptional:(NSString*)propertyName
+{
+    return YES;
+}
 @end

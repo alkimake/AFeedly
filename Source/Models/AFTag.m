@@ -9,5 +9,8 @@
 #import "AFTag.h"
 
 @implementation AFTag
-
++(BOOL)propertyIsOptional:(NSString*)propertyName
+{
+    return YES;
+}
 @end

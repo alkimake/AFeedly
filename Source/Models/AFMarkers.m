@@ -43,4 +43,9 @@
     return [self.unreadcounts objectsAtIndexes:indexes];
 }
 
++(BOOL)propertyIsOptional:(NSString*)propertyName
+{
+    return YES;
+}
+
 @end

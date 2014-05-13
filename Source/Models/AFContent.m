@@ -9,5 +9,8 @@
 #import "AFContent.h"
 
 @implementation AFContent
-
++(BOOL)propertyIsOptional:(NSString*)propertyName
+{
+    return YES;
+}
 @end

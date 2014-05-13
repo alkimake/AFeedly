@@ -9,5 +9,8 @@
 #import "AFCategory.h"
 
 @implementation AFCategory
-
++(BOOL)propertyIsOptional:(NSString*)propertyName
+{
+    return YES;
+}
 @end

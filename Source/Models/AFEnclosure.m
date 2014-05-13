@@ -9,5 +9,8 @@
 #import "AFEnclosure.h"
 
 @implementation AFEnclosure
-
++(BOOL)propertyIsOptional:(NSString*)propertyName
+{
+    return YES;
+}
 @end

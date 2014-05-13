@@ -9,5 +9,8 @@
 #import "AFOrigin.h"
 
 @implementation AFOrigin
-
++(BOOL)propertyIsOptional:(NSString*)propertyName
+{
+    return YES;
+}
 @end

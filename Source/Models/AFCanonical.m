@@ -9,5 +9,8 @@
 #import "AFCanonical.h"
 
 @implementation AFCanonical
-
++(BOOL)propertyIsOptional:(NSString*)propertyName
+{
+    return YES;
+}
 @end

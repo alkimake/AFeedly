@@ -9,5 +9,8 @@
 #import "AFSuggestion.h"
 
 @implementation AFSuggestion
-
++(BOOL)propertyIsOptional:(NSString*)propertyName
+{
+    return YES;
+}
 @end

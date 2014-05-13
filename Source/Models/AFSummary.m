@@ -9,5 +9,8 @@
 #import "AFSummary.h"
 
 @implementation AFSummary
-
++(BOOL)propertyIsOptional:(NSString*)propertyName
+{
+    return YES;
+}
 @end
