@@ -71,9 +71,11 @@
     [[AFLClient sharedClient] unreadStream:^(AFStream *stream) {
         NSLog(@"Unread Stream Returned");
         
-        [[[stream items] lastObject] setUnread:NO];
-        [[[stream items] lastObject] setSaved:YES];
-        
+        [[AFLClient sharedClient] saved:^(AFStream *stream) {
+            
+        } failure:^(NSError *error) {
+            
+        }];
         
     } failure:^(NSError *error) {
         NSLog(@"%@",error);

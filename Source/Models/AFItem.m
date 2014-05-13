@@ -11,6 +11,23 @@
 #import <hpple/TFHpple.h>
 
 @implementation AFItem
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        NSLog(@"initialized");
+        
+        [self addObserver:self forKeyPath:@"tags" options:NSKeyValueObservingOptionNew context:nil];
+    }
+    return self;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    self.saved = [self hasSavedTag];
+}
+
 + (JSONKeyMapper *)keyMapper
 {
     return [[JSONKeyMapper alloc] initWithDictionary:@{@"id" : @"_id",@"actionTimestamp" : @"actionTime"}];
@@ -20,31 +37,12 @@
     return YES;
 }
 
--(void)setSaved:(BOOL)saved
+-(BOOL)hasSavedTag
 {
-    _saved = saved;
-    
-    if (!saved) {
-        
-            NSMutableArray *tempArray = [NSMutableArray arrayWithArray:self.tags];
-            for (AFTag*tag in tempArray) {
-                if ([[tag label] hasSuffix:@"global.saved"]) {
-                    [tempArray removeObject:tag];
-                }
-            }
-        self.tags = (NSArray<AFTag>*)[NSArray arrayWithArray:tempArray];
-    }
-    
-}
-
--(BOOL)isSaved
-{
-    if (_saved == NO) {
-        NSIndexSet *indexes = [self.tags indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        return [[(AFTag*)obj label] hasSuffix:@"global.saved"];
-        }];
-        return indexes.count>0;
-    } else return _saved;
+    NSIndexSet *indexes = [self.tags indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        return [[(AFTag*)obj _id] hasSuffix:@"global.saved"];
+    }];
+    return indexes.count>0;
 }
 
 -(void)visualsUrlArray:(void (^)(NSArray*urls ))resultBlock

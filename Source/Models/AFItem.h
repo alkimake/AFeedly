@@ -45,7 +45,6 @@
 
 -(void)visualsUrlArray:(void (^)(NSArray*urls ))resultBlock
                failure:(void (^)(NSError*error ))failBlock;
--(BOOL)isSaved;
 
 
 
