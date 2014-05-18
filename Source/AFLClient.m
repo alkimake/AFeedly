@@ -261,6 +261,33 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
     }];
 }
 
+  -(void)search:(NSString*)query
+numberOfResults:(int)result
+         locale:(NSString*)locale
+        success:(void (^)(NSArray*categories ))resultBlock
+        failure:(void (^)(NSError*error ))failBlock
+{
+    NSDictionary *parameters = @{@"q":query,@"n":[NSNumber numberWithInt:result],@"locale":locale};
+    
+    [self getPath:@"search/feeds" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSArray *result = [AFSearch arrayOfModelsFromDictionaries:responseObject];
+        resultBlock(result);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failBlock(error);
+    }];
+}
+
+-(void)search:(NSString*)query
+numberOfResults:(int)result
+      success:(void (^)(NSArray*categories ))resultBlock
+      failure:(void (^)(NSError*error ))failBlock
+{
+    [self search:query
+ numberOfResults:result
+          locale:@"en-US"
+         success:resultBlock
+         failure:failBlock];
+}
 
 -(void)categories:(void (^)(NSArray*categories ))resultBlock
           failure:(void (^)(NSError*error ))failBlock

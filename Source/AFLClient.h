@@ -21,6 +21,7 @@
 #import "AFProfile.h"
 #import "AFItem.h"
 #import "AFStream.h"
+#import "AFSearch.h"
 
 #pragma mark - Type
 
@@ -58,6 +59,18 @@ typedef enum {
 #pragma mark - 
 -(void)markers:(void (^)(AFMarkers *markers))resultBlock
        failure:(void (^)(NSError*error ))failBlock;
+
+-(void)search:(NSString*)query
+numberOfResults:(int)result
+       locale:(NSString*)locale
+      success:(void (^)(NSArray*categories ))resultBlock
+      failure:(void (^)(NSError*error ))failBlock;
+
+-(void)search:(NSString*)query
+numberOfResults:(int)result
+      success:(void (^)(NSArray*categories ))resultBlock
+      failure:(void (^)(NSError*error ))failBlock;
+
 
 -(void)categories:(void (^)(NSArray*categories ))resultBlock
           failure:(void (^)(NSError*error ))failBlock;
