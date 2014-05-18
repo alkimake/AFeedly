@@ -264,14 +264,19 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
   -(void)search:(NSString*)query
 numberOfResults:(int)result
          locale:(NSString*)locale
-        success:(void (^)(NSArray*categories ))resultBlock
+        success:(void (^)(AFSearch*search ))resultBlock
         failure:(void (^)(NSError*error ))failBlock
 {
     NSDictionary *parameters = @{@"q":query,@"n":[NSNumber numberWithInt:result],@"locale":locale};
     
     [self getPath:@"search/feeds" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSArray *result = [AFSearch arrayOfModelsFromDictionaries:responseObject];
-        resultBlock(result);
+        NSError *error;
+        NSDictionary *responseDictionary = (NSDictionary*)responseObject;
+        AFSearch *search = [[AFSearch alloc] initWithDictionary:responseDictionary error:&error];
+        if (error) {
+            failBlock(error);
+        } else
+            resultBlock(search);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         failBlock(error);
     }];
@@ -279,7 +284,7 @@ numberOfResults:(int)result
 
 -(void)search:(NSString*)query
 numberOfResults:(int)result
-      success:(void (^)(NSArray*categories ))resultBlock
+      success:(void (^)(AFSearch*search ))resultBlock
       failure:(void (^)(NSError*error ))failBlock
 {
     [self search:query

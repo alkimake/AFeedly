@@ -63,12 +63,12 @@ typedef enum {
 -(void)search:(NSString*)query
 numberOfResults:(int)result
        locale:(NSString*)locale
-      success:(void (^)(NSArray*categories ))resultBlock
+      success:(void (^)(AFSearch*search ))resultBlock
       failure:(void (^)(NSError*error ))failBlock;
 
 -(void)search:(NSString*)query
 numberOfResults:(int)result
-      success:(void (^)(NSArray*categories ))resultBlock
+      success:(void (^)(AFSearch*search ))resultBlock
       failure:(void (^)(NSError*error ))failBlock;
 
 
