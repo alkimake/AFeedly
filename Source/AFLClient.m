@@ -316,6 +316,40 @@ numberOfResults:(int)result
     }];
 }
 
+-(void)subscribe:(NSString*)feedId
+       feedTitle:(NSString*)title
+      categories:(NSArray*)categories
+         success:(void (^)(BOOL success ))resultBlock
+         failure:(void (^)(NSError*error ))failBlock
+{
+    if (categories.count==0) {
+        NSError *error = [NSError errorWithDomain:@"AFeedly" code:503 userInfo:nil];
+        failBlock(error);
+        return;
+    }
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    [parameters setObject:feedId forKey:@"id"];
+    [parameters setObject:title forKey:@"title"];
+    
+    if ([[categories objectAtIndex:0] isKindOfClass:[NSDictionary class]]) {
+        [parameters setObject:categories forKey:@"categories"];
+    } else {
+        NSMutableArray *catArray = [NSMutableArray array];
+        for (AFCategory*category in categories) {
+            [catArray addObject:[category toDictionary]];
+        }
+        [parameters setObject:[NSArray arrayWithArray:catArray] forKey:@"categories"];
+    }
+    
+    [self getPath:@"subscriptions" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock(YES);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failBlock(error);
+    }];
+}
+
+
 -(void)feedsMeta:(NSArray*)feedIds
          success:(void (^)(NSArray*feeds ))resultBlock
          failure:(void (^)(NSError*error ))failBlock

@@ -78,6 +78,12 @@ numberOfResults:(int)result
 -(void)subscriptions:(void (^)(NSArray*subscriptions))resultBlock
              failure:(void (^)(NSError*error ))failBlock;
 
+-(void)subscribe:(NSString*)feedId
+       feedTitle:(NSString*)title
+      categories:(NSArray*)categories
+         success:(void (^)(BOOL success ))resultBlock
+         failure:(void (^)(NSError*error ))failBlock;
+
 -(void)feed:(NSString*)feedId
     success:(void (^)(AFFeed*feed ))resultBlock
     failure:(void (^)(NSError*error ))failBlock;
