@@ -88,6 +88,11 @@ numberOfResults:(int)result
        failure:(void (^)(NSError*error ))failBlock;
 -(void)getStreamContentForId:(NSString*)contentId
                   unreadOnly:(BOOL)unread
+                       count:(int)count
+                     success:(void (^)(AFStream*stream ))resultBlock
+                     failure:(void (^)(NSError*error ))failBlock;
+-(void)getStreamContentForId:(NSString*)contentId
+                  unreadOnly:(BOOL)unread
                      success:(void (^)(AFStream*stream ))resultBlock
                      failure:(void (^)(NSError*error ))failBlock;
 -(void)saved:(void (^)(AFStream*stream ))resultBlock

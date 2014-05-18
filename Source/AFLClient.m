@@ -370,6 +370,7 @@ numberOfResults:(int)result
 
 -(void)getStreamContentForId:(NSString*)contentId
                   unreadOnly:(BOOL)unread
+                       count:(int)count
                      success:(void (^)(AFStream*stream ))resultBlock
                      failure:(void (^)(NSError*error ))failBlock
 {
@@ -397,6 +398,15 @@ numberOfResults:(int)result
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         failBlock(error);
     }];
+    
+}
+
+-(void)getStreamContentForId:(NSString*)contentId
+                  unreadOnly:(BOOL)unread
+                     success:(void (^)(AFStream*stream ))resultBlock
+                     failure:(void (^)(NSError*error ))failBlock
+{
+    [self getStreamContentForId:contentId unreadOnly:unread count:20 success:resultBlock failure:failBlock];
     
 }
 
