@@ -11,4 +11,8 @@
 @interface AFCategory : JSONModel
 @property (nonatomic, strong) NSString *_id;
 @property (nonatomic, strong) NSString *label;
+
+
++ (AFCategory*)categoryWithLabel:(NSString*)label;
+
 @end
