@@ -357,7 +357,7 @@ numberOfResults:(int)result
         [parameters setObject:[NSArray arrayWithArray:catArray] forKey:@"categories"];
     }
     
-    [self getPath:@"subscriptions" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self postPath:@"subscriptions" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock(YES);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         failBlock(error);
