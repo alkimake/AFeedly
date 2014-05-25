@@ -12,9 +12,16 @@
 #import <LROAuth2Client/LROAuth2AccessToken.h>
 
 
-static NSString * const kFeedlyAPIBaseURLString = @"http://sandbox.feedly.com/v3";
-static NSString * const kFeedlyUserURLString = @"http://sandbox.feedly.com/v3/auth/auth";
-static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/auth/token";
+static NSString * const kFeedlyAPIBaseURLString = @"http://cloud.feedly.com/v3";
+static NSString * const kFeedlyUserURLString = @"http://cloud.feedly.com/v3/auth/auth";
+static NSString * const kFeedlyTokenURLString = @"http://cloud.feedly.com/v3/auth/token";
+
+static NSString * const kFeedlySandboxAPIBaseURLString = @"http://sandbox.feedly.com/v3";
+static NSString * const kFeedlySandboxUserURLString = @"http://sandbox.feedly.com/v3/auth/auth";
+static NSString * const kFeedlySandboxTokenURLString = @"http://sandbox.feedly.com/v3/auth/token";
+
+static id _sharedInstance = nil;
+static dispatch_once_t onceToken;
 
 @interface AFLClient ()
 @property (strong) AFeedlyAuthenticationBlock authenticationResultBlock;
@@ -26,9 +33,17 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
 
 #pragma mark - Initialization
 
++ (instancetype)createSharedClient:(BOOL)inSandbox
+{
+    dispatch_once(&onceToken, ^{
+        _sharedInstance = [[self alloc] initWithBaseURL:[NSURL URLWithString:(inSandbox)?kFeedlySandboxAPIBaseURLString:kFeedlyAPIBaseURLString]];
+        [(AFLClient*)_sharedInstance setIsInSandbox:inSandbox];
+    });
+    
+    return _sharedInstance;
+}
+
 + (instancetype) sharedClient {
-    static id _sharedInstance = nil;
-    static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedInstance = [[self alloc] initWithBaseURL:[NSURL URLWithString:kFeedlyAPIBaseURLString]];
     });
@@ -102,8 +117,8 @@ static NSString * const kFeedlyTokenURLString = @"http://sandbox.feedly.com/v3/a
     _oauthClient.delegate = self;
     _oauthClient.debug = NO;
     
-    _oauthClient.userURL = [NSURL URLWithString:kFeedlyUserURLString];
-    _oauthClient.tokenURL = [NSURL URLWithString:kFeedlyTokenURLString];
+    _oauthClient.userURL = [NSURL URLWithString:(_isInSandbox)?kFeedlySandboxUserURLString:kFeedlyUserURLString];
+    _oauthClient.tokenURL = [NSURL URLWithString:(_isInSandbox)?kFeedlySandboxTokenURLString:kFeedlyTokenURLString];
     
     if ([self.token hasExpired]) {
         [_oauthClient refreshAccessToken:self.token];

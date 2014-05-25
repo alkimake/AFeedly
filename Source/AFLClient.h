@@ -33,7 +33,9 @@ typedef enum {
     AFContentTypeCategory
 } AFContentType;
 
+
 @interface AFLClient : AFHTTPClient <LROAuth2ClientDelegate>
+
 
 @property (nonatomic,strong) LROAuth2Client *oauthClient;
 
@@ -41,7 +43,9 @@ typedef enum {
 @property (nonatomic,strong) NSString *secretKey;
 @property (nonatomic,strong) AFProfile *profile;
 @property (nonatomic,assign) BOOL isSyncWithServer;
+@property (nonatomic,assign) BOOL isInSandbox;
 
++ (instancetype)createSharedClient:(BOOL)inSandbox;
 + (instancetype) sharedClient;
 - (void)initWithApplicationId:(NSString*)appId andSecret:(NSString*)secret;
 - (BOOL)isAuthenticated;

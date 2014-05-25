@@ -13,7 +13,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [[AFLClient sharedClient] initWithApplicationId:@"sandbox" andSecret:@"0AUDIAHZEB0ISJ1JLFWZ"];
+    [[AFLClient createSharedClient:YES] initWithApplicationId:@"sandbox" andSecret:@"0AUDIAHZEB0ISJ1JLFWZ"];
     [[AFLClient sharedClient] setIsSyncWithServer:YES];
     return YES;
 }
