@@ -18,7 +18,7 @@
 {
     AFCategory *category = [AFCategory new];
     category.label = label;
-    category._id = [NSString stringWithFormat:@"/user/%@/category/%@",[[[AFLClient sharedClient] profile] _id],[label stringByReplacingOccurrencesOfString:@" " withString:@"-"]];
+    category._id = [NSString stringWithFormat:@"user/%@/category/%@",[[[AFLClient sharedClient] profile] _id],label];
     
     return category;
 }
