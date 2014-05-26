@@ -518,7 +518,7 @@ numberOfResults:(int)result
     
     NSDictionary *parameters = @{@"entryId":entryId};
     
-    [self getPath:path
+    [self putPath:path
        parameters:parameters
           success:^(AFHTTPRequestOperation *operation, id responseObject) {
               resultBlock(YES);
