@@ -87,6 +87,9 @@ numberOfResults:(int)result
       categories:(NSArray*)categories
          success:(void (^)(BOOL success ))resultBlock
          failure:(void (^)(NSError*error ))failBlock;
+-(void)unsubscribe:(NSString*)feedId
+           success:(void (^)(BOOL success ))resultBlock
+           failure:(void (^)(NSError*error ))failBlock;
 
 -(void)feed:(NSString*)feedId
     success:(void (^)(AFFeed*feed ))resultBlock

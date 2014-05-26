@@ -364,6 +364,29 @@ numberOfResults:(int)result
     }];
 }
 
+-(void)unsubscribe:(NSString*)feedId
+            success:(void (^)(BOOL success ))resultBlock
+            failure:(void (^)(NSError*error ))failBlock
+{
+    if (![self validateProfile:failBlock]) {
+        return;
+    }
+    
+    NSString *path = [NSString stringWithFormat:@"subscriptions/%@",[feedId stringByEscapingForURLQuery]];
+    
+    NSLog(@"%@",path);
+    
+    [self deletePath:path
+          parameters:nil
+             success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                 resultBlock(YES);
+             }
+             failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                 failBlock(error);
+             }];
+    
+}
+
 
 -(void)feedsMeta:(NSArray*)feedIds
          success:(void (^)(NSArray*feeds ))resultBlock
