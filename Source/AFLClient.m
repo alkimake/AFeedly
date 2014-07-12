@@ -83,6 +83,14 @@ static dispatch_once_t onceToken;
 
 #pragma mark - Token & Authentication
 
+
+- (void)resetToken
+{
+    self.token = nil;
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"feedly/token"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 - (LROAuth2AccessToken*)loadToken
 {
     NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:@"feedly/token"];

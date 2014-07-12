@@ -55,6 +55,9 @@ typedef enum {
 - (void)authenticateUsingWebview:(UIWebView*)webView
                  withResultBlock:(AFeedlyAuthenticationBlock)resultBlock;
 
+- (void)resetToken;
+
+
 #pragma mark - definitions
 
 - (NSString*)unreadsCategoryName;
