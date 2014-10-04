@@ -16,11 +16,14 @@
 {
     self = [super init];
     if (self) {
-        NSLog(@"initialized");
-        
         [self addObserver:self forKeyPath:@"tags" options:NSKeyValueObservingOptionNew context:nil];
     }
     return self;
+}
+
+- (void) dealloc
+{
+    [self removeObserver:self forKeyPath:@"tags"];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context

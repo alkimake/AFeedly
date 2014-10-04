@@ -214,10 +214,10 @@ static dispatch_once_t onceToken;
        forIds:(NSArray*)feedIds
      withType:(AFContentType)type
   lastEntryId:(NSString*)lastReadEntryId
-         success:(void (^)(BOOL success))resultBlock
-         failure:(void (^)(NSError*error ))failBlock
+      success:(void (^)(BOOL success))resultBlock
+      failure:(void (^)(NSError*error ))failBlock
 {
-
+    
     NSMutableDictionary *parameters = [NSMutableDictionary new];
     
     NSString *idArrayName = @"entryIds";
@@ -253,7 +253,7 @@ static dispatch_once_t onceToken;
     [parameters setObject:feedIds forKey:idArrayName];
     [parameters setObject:typeString forKey:@"type"];
     [parameters setObject:action forKey:@"action"];
-    if (type!=AFContentTypeEntry) {
+    if (type!=AFContentTypeEntry && lastReadEntryId!=nil) {
         [parameters setObject:lastReadEntryId forKey:@"lastReadEntryId"];
     }
     
@@ -284,11 +284,11 @@ static dispatch_once_t onceToken;
     }];
 }
 
-  -(void)search:(NSString*)query
+-(void)search:(NSString*)query
 numberOfResults:(int)result
-         locale:(NSString*)locale
-        success:(void (^)(AFSearch*search ))resultBlock
-        failure:(void (^)(NSError*error ))failBlock
+       locale:(NSString*)locale
+      success:(void (^)(AFSearch*search ))resultBlock
+      failure:(void (^)(NSError*error ))failBlock
 {
     NSDictionary *parameters = @{@"q":query,@"n":[NSNumber numberWithInt:result],@"locale":locale};
     
@@ -373,8 +373,8 @@ numberOfResults:(int)result
 }
 
 -(void)unsubscribe:(NSString*)feedId
-            success:(void (^)(BOOL success ))resultBlock
-            failure:(void (^)(NSError*error ))failBlock
+           success:(void (^)(BOOL success ))resultBlock
+           failure:(void (^)(NSError*error ))failBlock
 {
     if (![self validateProfile:failBlock]) {
         return;
@@ -486,7 +486,7 @@ numberOfResults:(int)result
                      success:(void (^)(AFStream*stream ))resultBlock
                      failure:(void (^)(NSError*error ))failBlock
 {
-    [self getStreamContentForId:contentId unreadOnly:unread count:20 success:resultBlock failure:failBlock];
+    [self getStreamContentForId:contentId unreadOnly:unread count:100 success:resultBlock failure:failBlock];
     
 }
 
@@ -513,16 +513,17 @@ numberOfResults:(int)result
 -(void)tagEntry:(NSString*)entryId
            tags:(NSArray*)tags
         success:(void (^)(BOOL success ))resultBlock
-     failure:(void (^)(NSError*error ))failBlock
+        failure:(void (^)(NSError*error ))failBlock
 {
     if (![self validateProfile:failBlock]) {
+        return;
+    }
+    if (entryId==nil) {
         return;
     }
     
     
     NSString *path = [NSString stringWithFormat:@"tags/%@",[[tags arrayByEscapingForURLQuery] componentsJoinedByString:@","]];
-    
-    NSLog(@"%@",path);
     
     NSDictionary *parameters = @{@"entryId":entryId};
     
@@ -538,9 +539,9 @@ numberOfResults:(int)result
 }
 
 -(void)tagEntries:(NSArray*)entryIds
-           tags:(NSArray*)tags
-        success:(void (^)(BOOL success ))resultBlock
-        failure:(void (^)(NSError*error ))failBlock
+             tags:(NSArray*)tags
+          success:(void (^)(BOOL success ))resultBlock
+          failure:(void (^)(NSError*error ))failBlock
 {
     if (![self validateProfile:failBlock]) {
         return;
@@ -567,9 +568,9 @@ numberOfResults:(int)result
 
 
 -(void)untagEntries:(NSArray*)entryIds
-             tags:(NSArray*)tags
-          success:(void (^)(BOOL success ))resultBlock
-          failure:(void (^)(NSError*error ))failBlock
+               tags:(NSArray*)tags
+            success:(void (^)(BOOL success ))resultBlock
+            failure:(void (^)(NSError*error ))failBlock
 {
     if (![self validateProfile:failBlock]) {
         return;
@@ -580,13 +581,13 @@ numberOfResults:(int)result
     NSLog(@"%@",path);
     
     [self deletePath:path
-       parameters:nil
-          success:^(AFHTTPRequestOperation *operation, id responseObject) {
-              resultBlock(YES);
-          }
-          failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-              failBlock(error);
-          }];
+          parameters:nil
+             success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                 resultBlock(YES);
+             }
+             failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                 failBlock(error);
+             }];
     
 }
 
@@ -599,7 +600,7 @@ numberOfResults:(int)result
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-
+    
     if ([object isKindOfClass:[AFItem class]]) {
         
         AFItem *item = (AFItem*)object;
@@ -627,7 +628,7 @@ numberOfResults:(int)result
                            NSLog(@"%@",error.localizedDescription);
                        }];
             } else {
-            
+                
                 [self untagEntries:@[item._id]
                               tags:@[[self savedTagName]]
                            success:^(BOOL success) {
