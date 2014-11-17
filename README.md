@@ -10,13 +10,13 @@ Feedly API Client framework lets you authenticate by OAuth and connect Feedly AP
 
 First add pod to your `Podfile` ;
 
-```
+```bash
 pod 'AFeedly', '~> 0.0'
 ```
 
 and install your pods by running command
 
-```
+```bash
 pod install
 ```
 
@@ -28,7 +28,7 @@ Initialize your client once with your Feedly Application ID and Secret obtained 
 
 you may also be running on feedly sandbox enviroment. For detailed information please visit [http://developer.feedly.com/v3/sandbox/](http://developer.feedly.com/v3/sandbox/)
 
-Additionally you can user experimental `sync with server` feature by adding:
+Additionally you can use experimental `sync with server` feature by adding:
 
 ```obj-c
 [[AFLClient sharedClient] setIsSyncWithServer:YES];
