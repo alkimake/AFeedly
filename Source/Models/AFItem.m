@@ -8,6 +8,7 @@
 
 #import "AFItem.h"
 #import "AFTag.h"
+#import "AFLClient.h"
 #import <hpple/TFHpple.h>
 
 @implementation AFItem
@@ -24,6 +25,8 @@
 - (void) dealloc
 {
     [self removeObserver:self forKeyPath:@"tags"];
+    [self removeObserver:[AFLClient sharedClient] forKeyPath:@"unread"];
+    [self removeObserver:[AFLClient sharedClient] forKeyPath:@"saved"];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
