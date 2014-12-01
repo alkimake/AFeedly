@@ -16,6 +16,8 @@
     NSInteger index = [self.unreadcounts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         return [[(AFCount*)obj _id] hasSuffix:@"global.all"];
     }];
+    if (index==NSNotFound)
+        return 0;
     return [(AFCount*)[self.unreadcounts objectAtIndex:index] count];
 }
 
@@ -24,6 +26,8 @@
     NSInteger index = [self.unreadcounts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         return [[(AFCount*)obj _id] isEqualToString:feedId];
     }];
+    if (index==NSNotFound)
+        return 0;
     return [(AFCount*)[self.unreadcounts objectAtIndex:index] count];
 }
 
@@ -32,6 +36,8 @@
     NSIndexSet *indexes = [self.unreadcounts indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         return [[(AFCount*)obj _id] hasPrefix:@"user"];
     }];
+    if (indexes==nil)
+        return @[];
     return [self.unreadcounts objectsAtIndexes:indexes];
 }
 
@@ -40,6 +46,8 @@
     NSIndexSet *indexes = [self.unreadcounts indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         return [[(AFCount*)obj _id] hasPrefix:@"feed"];
     }];
+    if (indexes==nil)
+        return @[];
     return [self.unreadcounts objectsAtIndexes:indexes];
 }
 
