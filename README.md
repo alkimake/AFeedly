@@ -2,7 +2,7 @@
 
 #iOS Feedly API Client
 
-Feedly API Client framework lets you authenticate by OAuth and connect Feedly APIs by returning Objective-C models. 
+Feedly API Client framework lets you authenticate by OAuth and connect Feedly APIs by returning Objective-C models.
 
 **Under heavily development**
 
